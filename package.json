@@ -2,7 +2,11 @@
   "name": "tr-utilities-lib",
   "version": "1.0.0",
   "description": "utilities library made by Tom Raaff",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "/dist"
+  ],
   "scripts": {
     "start": "webpack serve --mode development",
     "test": "jest",
