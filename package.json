@@ -1,0 +1,15 @@
+{
+  "name": "tr-utilities-lib",
+  "version": "1.0.0",
+  "description": "utilities library made by Tom Raaff",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "utilities",
+    "tomraaff"
+  ],
+  "author": "Tom Raaff",
+  "license": "ISC"
+}
