@@ -3,7 +3,7 @@
     "declaration": true,
     "module": "ES2015",
     "moduleResolution": "Node",
-    "target": "ES6",
+    "target": "ES5",
     "outDir": "./dist",
     "sourceMap": true,
     "removeComments": true,

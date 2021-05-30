@@ -12,7 +12,8 @@
     "test": "jest",
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development",
-    "clean": "rm dist/bundle.js"
+    "clean": "rm dist/bundle.js",
+    "prepublish": "tsc"
   },
   "keywords": [
     "utilities",
