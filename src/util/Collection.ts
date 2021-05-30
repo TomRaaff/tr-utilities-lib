@@ -87,3 +87,4 @@ export default class Collection<T> {
 		return Collection.of(arr);
 	}
 }
+// Thank you, Rogier Spieker

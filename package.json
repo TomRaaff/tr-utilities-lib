@@ -1,7 +1,7 @@
 {
   "name": "tr-utilities-lib",
   "version": "1.0.3",
-  "description": "utilities library made by Tom Raaff",
+  "description": "personal utilities library made by Tom Raaff",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -13,14 +13,19 @@
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development",
     "clean": "rm dist/bundle.js",
-    "prepublish": "tsc"
+    "prepublish": "tsc && npm version patch --force"
   },
   "keywords": [
     "utilities",
-    "tomraaff"
+    "personal"
   ],
   "author": "Tom Raaff",
   "license": "ISC",
+  "homepage": "https://github.com/TomRaaff/tr-utilities-lib",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TomRaaff/tr-utilities-lib"
+  },
   "devDependencies": {
     "jest": "^27.0.3",
     "@jest/globals": "^26.6.2",
