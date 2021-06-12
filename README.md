@@ -2,6 +2,10 @@
 
 Not meant for use in Production. This is a personal library and is maintained to fit my own needs.
 
+### Publishing notes
+- Bump version `npm version [major | minor | patch]`
+- Publish `npm publish`
+
 ### Installation
 Run `npm install tr-utilities-lib`
 
@@ -23,3 +27,4 @@ Also known as Option or Optional. It might contain a value. If not, it forces th
 ### Either
 Meant to contain a happy-flow-response (called Right) or an unhappy-flow-response (called Left).
 [See implementation](https://github.com/TomRaaff/tr-utilities-lib/blob/main/src/util/Either.ts)
+
