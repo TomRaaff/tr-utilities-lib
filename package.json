@@ -1,6 +1,6 @@
 {
   "name": "tr-utilities-lib",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "personal utilities library made by Tom Raaff",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,7 @@
     "build": "webpack --mode production",
     "build-dev": "webpack --mode development",
     "clean": "rm dist/bundle.js",
-    "prepublish": "tsc && npm version patch --force"
+    "prepublish": "tsc && npm version minor --force"
   },
   "keywords": [
     "utilities",
