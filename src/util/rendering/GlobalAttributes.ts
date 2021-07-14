@@ -1,6 +1,7 @@
 import { EventHandlerAttributes } from './EventHandlerAttributes';
+import { AriaAttributes } from './AriaAttributes';
 
-export interface GlobalAttributes extends EventHandlerAttributes {
+export interface GlobalAttributes extends EventHandlerAttributes, AriaAttributes {
 	accept?: string | boolean;
 	accesskey?: string | boolean;
 	action?: string | boolean;
