@@ -102,23 +102,16 @@ describe('Collection', () => {
 			isExternalEmployee: false,
 		};
 		// act
-		const result = dataArray.findOne({ id: 0 })
-								.getOrElse(() => ({} as Employee));
+		const result = dataArray.findOne({ id: 0 });
 		// assert
 		expect(result).toEqual(expected);
 	});
-	it('.findOne() should return Maybe.None when item not present', () => {
+	it('.findOne() should return undefined when item not present', () => {
 		// arrange
-		const expected = {
-			id: 0,
-			name: 'Rogier',
-			role: 'lead-dev',
-			isExternalEmployee: false,
-		}
+		const expected = undefined
 		// act
-		const employeeMaybe = dataArray.findOne({ id: 893987 });
-		const result = employeeMaybe
-								.getOrElse(() => expected);
+		const employee = dataArray.findOne({ id: 893987 });
+		const result = employee;
 		// assert
 		expect(result).toEqual(expected);
 	});
