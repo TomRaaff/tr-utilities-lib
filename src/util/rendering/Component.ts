@@ -2,7 +2,7 @@ let id = 0;
 
 export default abstract class Component {
 	protected state: any;
-	private componentId: string;
+	protected componentId: string;
 
 	constructor() {
 		this.componentId = (id++).toString();
