@@ -66,6 +66,11 @@ export function isObject<S>(validators: Array<[keyof S, ValidatorFn]>): Validato
     }
 }
 
+export function optional(validator: ValidatorFn): ValidatorFn {
+    return (field: unknown) => (field == undefined) ? new CorrectType() : validator(field);
+}
+
+// todo: implement this
 export function isArray(field: unknown): CorrectType | Array<WrongType> {
     if (Array.isArray(field)) {
         return new CorrectType()
