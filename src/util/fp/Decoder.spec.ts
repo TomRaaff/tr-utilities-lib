@@ -149,7 +149,7 @@ describe('Decoder', () => {
     it('should FAIL but not break when a nested object is missing', () => {
         const expected = [
             {found: "Field with value undefined is not correct. Found undefined, but expected boolean"},
-            {found: "Found undefined, but expected an Object"}
+            {found: "Field with value undefined is not correct. Found undefined, but expected Object"}
         ];
 
         const obj = {

@@ -4,6 +4,7 @@ class CorrectType {
     }
 }
 
+// TODO: simplify WrongType
 // class, because we can check the type with instanceof
 class WrongType {
     constructor(public found: string) {
@@ -58,7 +59,7 @@ export function isNumber(field: unknown): CorrectType | Array<WrongType> {
 
 export function isObject<S>(validators: Array<[keyof S, ValidatorFn]>): ValidatorFn {
     return (field: unknown) => {
-        if (field == undefined) return [new WrongType(`Found undefined, but expected an Object`)];
+        if (field == undefined) return createWrongType(field, 'Object');
         const nestedObj = field as S;
         const validationResults = validators.map(([nestedField, fn]) => fn(nestedObj[nestedField]));
         const wrongTypes = getWrongTypes(validationResults);
@@ -75,7 +76,7 @@ export function isArray(field: unknown): CorrectType | Array<WrongType> {
     if (Array.isArray(field)) {
         return new CorrectType()
     } else {
-        return [new WrongType(`Field ${field} is not correct. Found ${typeof field}, but expected an Array`)];
+        return createWrongType(field, 'Array');
     }
 }
 
@@ -84,6 +85,10 @@ function isType(field: any, typeToCheck: string): CorrectType | Array<WrongType>
     if (typeof field === typeToCheck) {
         return new CorrectType();
     } else {
-        return [new WrongType(`Field with value ${field} is not correct. Found ${typeof field}, but expected ${typeToCheck}`)];
+        return createWrongType(field, typeToCheck);
     }
+}
+
+function createWrongType(field: any, expectedType: string): Array<WrongType> {
+    return [new WrongType(`Field with value ${field} is not correct. Found ${typeof field}, but expected ${expectedType}`)];
 }
