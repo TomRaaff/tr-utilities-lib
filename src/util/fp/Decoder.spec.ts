@@ -1,4 +1,4 @@
-import {decoder, isBoolean, isNumber, isObject, isString} from "./Decoder";
+import {validateType, isBoolean, isNumber, isObject, isString, optional} from "./ValidateType";
 
 type Person = {
     name: string;
@@ -21,7 +21,7 @@ describe('Decoder', () => {
             isAwesome: true
         }
 
-        const result = decoder<Partial<Person>>(obj, [
+        const result = validateType<Partial<Person>>(obj, [
             ['name', isString],
             ['age', isNumber],
             ['isAwesome', isBoolean],
@@ -32,9 +32,9 @@ describe('Decoder', () => {
 
     it('should FAIL for primitives', () => {
         const expected = [
-            { found: 'Field with value 303 is not correct. Found number, but expected string'},
-            { found: 'Field with value true is not correct. Found boolean, but expected number'},
-            { found: 'Field with value totally is not correct. Found string, but expected boolean'},
+            {found: 'Field with value 303 is not correct. Found number, but expected string'},
+            {found: 'Field with value true is not correct. Found boolean, but expected number'},
+            {found: 'Field with value totally is not correct. Found string, but expected boolean'},
         ];
 
         const obj = {
@@ -43,7 +43,7 @@ describe('Decoder', () => {
             isAwesome: 'totally'
         } as unknown as Partial<Person>
 
-        const result = decoder<Partial<Person>>(obj, [
+        const result = validateType<Partial<Person>>(obj, [
             ['name', isString],
             ['age', isNumber],
             ['isAwesome', isBoolean],
@@ -65,7 +65,7 @@ describe('Decoder', () => {
             }
         }
 
-        const result = decoder<Person>(obj, [
+        const result = validateType<Person>(obj, [
             ['name', isString],
             ['age', isNumber],
             ['isAwesome', isBoolean],
@@ -81,9 +81,9 @@ describe('Decoder', () => {
 
     it('should FAIL with a nested object', () => {
         const expected = [
-            { found: 'Field with value 14 is not correct. Found string, but expected number'},
-            { found: 'Field with value 3621 is not correct. Found number, but expected string'},
-            { found: 'Field with value true is not correct. Found boolean, but expected string'},
+            {found: 'Field with value 14 is not correct. Found string, but expected number'},
+            {found: 'Field with value 3621 is not correct. Found number, but expected string'},
+            {found: 'Field with value true is not correct. Found boolean, but expected string'},
         ];
 
         const obj = {
@@ -97,7 +97,7 @@ describe('Decoder', () => {
             }
         } as unknown as Person;
 
-        const result = decoder<Person>(obj, [
+        const result = validateType<Person>(obj, [
             ['name', isString],
             ['age', isNumber],
             ['isAwesome', isBoolean],
