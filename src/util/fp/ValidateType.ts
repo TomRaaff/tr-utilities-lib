@@ -11,31 +11,48 @@ class WrongType {
     }
 }
 
-type ValidatorFn = (field: unknown) => CorrectType | Array<WrongType>;
+// TODO implement this when fieldNames are available
+// class ValidationResult {
+//     constructor(public isValid: boolean,
+//                 public fieldName: string,
+//                 public fieldValue: any,
+//                 public expectedType: string) {}
+//     getMessage() {
+//         return `Field ${this.fieldName} is not correct. Found ${typeof this.fieldValue}, but expected ${this.expectedType}`
+//     }
+// }
+
+type ValidatorFn<T> = (obj: T, field: keyof T) => CorrectType | Array<WrongType>;
+
+
+type Validator<T> = { [key in keyof T]: ValidatorFn<any> };
 
 /**
  * Use this function to check whether the incoming object is of the type you expect.
  * Usage example:
  * ```
  * const result =
- *    decoder<Person>(incomingObject, [
- *        ['name', isString],
- *        ['age', isNumber],
- *        ['isAwesome', isBoolean],
- *        ['address', isObject<Address>([
- *            ['houseNo', isNumber],
- *            ['street', isString],
- *            ['city', isString]
- *        ])],
- *    ]);
+ *      validateType<Person>(incomingObj, {
+ *          name: isString,
+ *          age: isNumber,
+ *          isAwesome: isBoolean,
+ *          address: isObject<Address>({
+ *              houseNo: isNumber,
+ *              street: isString,
+ *              city: isString,
+ *          }),
+ *      });
  * ```
- * @param obj
- * @param validators
  */
-export function validateType<T>(obj: T, validators: Array<[keyof T, ValidatorFn]>): T | Array<WrongType> {
-    const validationResults = validators.map(([field, fn]) => fn(obj[field]));
+export function validateType<T>(obj: T, validator: Validator<T>): T | Array<WrongType> {
+    const validationResults = Object.entries(validator)
+        .map(([key, value]) => ({
+            field: key as unknown as keyof T,
+            validatorFn: value as unknown as ValidatorFn<any>
+        }))
+        .map(({field, validatorFn}) => validatorFn(obj, field));
     const wrongTypes = getWrongTypes(validationResults);
-    return (wrongTypes.length === 0) ? obj : wrongTypes;
+    return wrongTypes.length === 0 ? obj : wrongTypes
 }
 
 function getWrongTypes(validationResults: Array<CorrectType|Array<WrongType>>): Array<WrongType> {
@@ -45,50 +62,55 @@ function getWrongTypes(validationResults: Array<CorrectType|Array<WrongType>>): 
         .reduce((acc: Array<WrongType>, cur) => acc.concat(cur), []);
 }
 
-export function isString(field: unknown): CorrectType | Array<WrongType> {
-    return isType(field, 'string');
+export function isString<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
+    return isType(obj, field, 'string');
 }
 
-export function isBoolean(field: unknown): CorrectType | Array<WrongType> {
-    return isType(field, 'boolean');
+export function isBoolean<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
+    return isType(obj, field, 'boolean');
 }
 
-export function isNumber(field: unknown): CorrectType | Array<WrongType> {
-    return isType(field, 'number');
+export function isNumber<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
+    return isType(obj, field, 'number');
 }
 
-export function isObject<S>(validators: Array<[keyof S, ValidatorFn]>): ValidatorFn {
-    return (field: unknown) => {
-        if (field == undefined) return createWrongType(field, 'Object');
-        const nestedObj = field as S;
-        const validationResults = validators.map(([nestedField, fn]) => fn(nestedObj[nestedField]));
+export function isObject<S>(validator: Validator<S>): ValidatorFn<S> {
+    return (obj: S, field: keyof S) => {
+        if (obj == undefined || obj[field] == undefined) return createWrongType(obj, field, 'Object');
+        const nestedObj = obj[field];
+        const validationResults = Object.entries(validator)
+            .map(([key, value]) => ({
+                field: key as unknown as keyof S,
+                validatorFn: value as unknown as ValidatorFn<any>
+            }))
+            .map(({field, validatorFn}) => validatorFn(nestedObj, field));
         const wrongTypes = getWrongTypes(validationResults);
-        return (wrongTypes.length === 0) ? new CorrectType() : wrongTypes;
+        return wrongTypes.length === 0 ? new CorrectType : wrongTypes
     }
 }
 
-export function optional(validator: ValidatorFn): ValidatorFn {
-    return (field: unknown) => (field == undefined) ? new CorrectType() : validator(field);
+export function optional<T>(validator: ValidatorFn<T>): ValidatorFn<T> {
+    return (obj: T, field: keyof T) => (obj[field] == undefined) ? new CorrectType() : validator(obj, field);
 }
 
 // todo: implement this
-export function isArray(field: unknown): CorrectType | Array<WrongType> {
+export function isArray<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
     if (Array.isArray(field)) {
         return new CorrectType()
     } else {
-        return createWrongType(field, 'Array');
+        return createWrongType(obj, field, 'Array');
     }
 }
 
-// todo: somehow get the fieldname instead of it's value
-function isType(field: any, typeToCheck: string): CorrectType | Array<WrongType> {
-    if (typeof field === typeToCheck) {
+function isType<T>(obj: T, field: keyof T, typeToCheck: string): CorrectType | Array<WrongType> {
+    if (obj && obj[field] && typeof obj[field] === typeToCheck) {
         return new CorrectType();
     } else {
-        return createWrongType(field, typeToCheck);
+        return createWrongType(obj, field, typeToCheck);
     }
 }
 
-function createWrongType(field: any, expectedType: string): Array<WrongType> {
-    return [new WrongType(`Field with value ${field} is not correct. Found ${typeof field}, but expected ${expectedType}`)];
+function createWrongType<T>(obj: T, field: keyof T, expectedType: string): Array<WrongType> {
+    const property = (obj && obj[field]) ? obj[field] : undefined;
+    return [new WrongType(`Field ${field} is not correct. Found ${typeof property}, but expected ${expectedType}`)];
 }
