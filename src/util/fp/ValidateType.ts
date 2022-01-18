@@ -7,7 +7,7 @@ class CorrectType {
 // TODO: simplify WrongType
 // class, because we can check the type with instanceof
 class WrongType {
-    constructor(public found: string) {
+    constructor(public mismatch: string) {
     }
 }
 
@@ -23,7 +23,6 @@ class WrongType {
 // }
 
 type ValidatorFn<T> = (obj: T, field: keyof T) => CorrectType | Array<WrongType>;
-
 
 type Validator<T> = { [key in keyof T]: ValidatorFn<any> };
 
@@ -74,6 +73,18 @@ export function isNumber<T>(obj: T, field: keyof T): CorrectType | Array<WrongTy
     return isType(obj, field, 'number');
 }
 
+export function isDate<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
+    if (obj && obj[field] && obj[field] instanceof Date)  {
+        return new CorrectType();
+    } else{
+        return createWrongType(obj, field, 'Date');
+    }
+}
+
+export function optional<T>(validator: ValidatorFn<T>): ValidatorFn<T> {
+    return (obj: T, field: keyof T) => (obj[field] == undefined) ? new CorrectType() : validator(obj, field);
+}
+
 export function isObject<S>(validator: Validator<S>): ValidatorFn<S> {
     return (obj: S, field: keyof S) => {
         if (obj == undefined || obj[field] == undefined) return createWrongType(obj, field, 'Object');
@@ -87,10 +98,6 @@ export function isObject<S>(validator: Validator<S>): ValidatorFn<S> {
         const wrongTypes = getWrongTypes(validationResults);
         return wrongTypes.length === 0 ? new CorrectType : wrongTypes
     }
-}
-
-export function optional<T>(validator: ValidatorFn<T>): ValidatorFn<T> {
-    return (obj: T, field: keyof T) => (obj[field] == undefined) ? new CorrectType() : validator(obj, field);
 }
 
 // todo: implement this
