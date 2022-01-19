@@ -4,23 +4,10 @@ class CorrectType {
     }
 }
 
-// TODO: simplify WrongType
-// class, because we can check the type with instanceof
 class WrongType {
     constructor(public mismatch: string) {
     }
 }
-
-// TODO implement this when fieldNames are available
-// class ValidationResult {
-//     constructor(public isValid: boolean,
-//                 public fieldName: string,
-//                 public fieldValue: any,
-//                 public expectedType: string) {}
-//     getMessage() {
-//         return `Field ${this.fieldName} is not correct. Found ${typeof this.fieldValue}, but expected ${this.expectedType}`
-//     }
-// }
 
 type ValidatorFn<T> = (obj: T, field: keyof T) => CorrectType | Array<WrongType>;
 
@@ -85,13 +72,13 @@ export function optional<T>(validator: ValidatorFn<T>): ValidatorFn<T> {
     return (obj: T, field: keyof T) => (obj[field] == undefined) ? new CorrectType() : validator(obj, field);
 }
 
-export function isObject<S>(validator: Validator<S>): ValidatorFn<S> {
-    return (obj: S, field: keyof S) => {
+export function isObject<T>(validator: Validator<T>): ValidatorFn<T> {
+    return (obj: T, field: keyof T) => {
         if (obj == undefined || obj[field] == undefined) return createWrongType(obj, field, 'Object');
         const nestedObj = obj[field];
         const validationResults = Object.entries(validator)
             .map(([key, value]) => ({
-                field: key as unknown as keyof S,
+                field: key as unknown as keyof T,
                 validatorFn: value as unknown as ValidatorFn<any>
             }))
             .map(({field, validatorFn}) => validatorFn(nestedObj, field));
@@ -100,12 +87,13 @@ export function isObject<S>(validator: Validator<S>): ValidatorFn<S> {
     }
 }
 
-// todo: implement this
-export function isArray<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
-    if (Array.isArray(field)) {
-        return new CorrectType()
-    } else {
-        return createWrongType(obj, field, 'Array');
+export function isArray<T>(validator: Validator<T>): ValidatorFn<T> {
+    return (obj: T, field: keyof T) => {
+        if (!obj && !Array.isArray(obj[field])) {
+            return createWrongType(obj, field, 'Array');
+        }
+        const firstArrayItem = (obj[field] as unknown as Array<any>)[0];
+        return validateType(firstArrayItem, validator);
     }
 }
 

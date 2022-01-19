@@ -183,4 +183,43 @@ describe('ValidateType', () => {
         expect(result).toEqual(expected);
     });
 
+    it('should succeed for arrays', () => {
+        const obj = {
+            addresses: [
+                { houseNo: 14, street: 'Silversteyn', city: 'NewYork' },
+                { houseNo: 3, street: 'Bridgelane', city: 'New Jersey' },
+            ]
+        }
+
+        const result = validateType<{addresses: Address[]}>(obj, {
+            addresses: isArray<Address>({
+                houseNo: isNumber,
+                street: isString,
+                city: isString,
+            }),
+        })
+        expect(result).toEqual(obj);
+    });
+
+    it('should FAIL for arrays', () => {
+        const expected = [
+            {mismatch: "Field street is not correct. Found number, but expected string"},
+        ];
+
+        const obj = {
+            addresses: [
+                { houseNo: 14, street: 34, city: 'NewYork' },
+                { houseNo: 3, street: 234, city: 'New Jersey' },
+            ]
+        } as unknown as {addresses: Address[]};
+
+        const result = validateType<{addresses: Address[]}>(obj, {
+            addresses: isArray<Address>({
+                houseNo: isNumber,
+                street: isString,
+                city: isString,
+            }),
+        });
+        expect(result).toEqual(expected);
+    });
 });
