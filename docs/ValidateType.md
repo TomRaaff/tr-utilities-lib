@@ -110,7 +110,7 @@ and `isArray` were the hard ones.
 
 [//]: # (// TODO insert link)
 See 
-my GitHub repo
+[my GitHub repo](https://github.com/TomRaaff/tr-utilities-lib/blob/main/src/util/fp/ValidateType.ts)
 for the end result of the code. Feel free to use it. I would advise you to simply
 copy-paste the code into your code-base. It's not a lot of code, so you're 
 better off maintaining it yourself. 
@@ -139,7 +139,7 @@ export personValidator: Validator<Person> = {
  }
 ```
 
-- other solutions out there
+[//]: # (todo other solutions out there)
 
 ## Other solutions out there
 Joi: https://github.com/damiancipolat/dynamicy-type-check-in-js/blob/master/using_joi.md
