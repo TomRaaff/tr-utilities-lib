@@ -11,7 +11,7 @@ class WrongType {
 
 type ValidatorFn<T> = (obj: T, field: keyof T) => CorrectType | Array<WrongType>;
 
-type Validator<T> = { [key in keyof T]: ValidatorFn<any> };
+export type Validator<T> = { [key in keyof T]: ValidatorFn<any> };
 
 /**
  * Use this function to check whether the incoming object is of the type you expect.
@@ -68,12 +68,17 @@ export function isDate<T>(obj: T, field: keyof T): CorrectType | Array<WrongType
     }
 }
 
+// todo implement this.
+// export function isOfValue<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
+//
+// }
+
 export function optional<T>(validator: ValidatorFn<T>): ValidatorFn<T> {
     return (obj: T, field: keyof T) => (obj[field] == undefined) ? new CorrectType() : validator(obj, field);
 }
 
 export function isObject<T>(validator: Validator<T>): ValidatorFn<T> {
-    return (obj: T, field: keyof T) => {
+    return (obj: any, field: keyof any) => {
         if (obj == undefined || obj[field] == undefined) return createWrongType(obj, field, 'Object');
         const nestedObj = obj[field];
         const validationResults = Object.entries(validator)
@@ -88,7 +93,7 @@ export function isObject<T>(validator: Validator<T>): ValidatorFn<T> {
 }
 
 export function isArray<T>(validator: Validator<T>): ValidatorFn<T> {
-    return (obj: T, field: keyof T) => {
+    return (obj: any, field: keyof any) => {
         if (!obj && !Array.isArray(obj[field])) {
             return createWrongType(obj, field, 'Array');
         }
