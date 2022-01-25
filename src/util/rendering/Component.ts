@@ -17,21 +17,13 @@ export default abstract class Component {
 		apply: (target, thisArg, argArray) => {
 			let oldComponent = document.querySelector(`[data-component-id="${this.componentId}"]`);
 			let parent;
-			if (oldComponent) {
-				parent = oldComponent.parentElement;
-				oldComponent.remove();
-				oldComponent = null;
-			}
 			const renderOutput = target.apply(thisArg, ...argArray) as HTMLElement;
 			renderOutput.dataset.componentId = this.componentId;
-			if (parent) {
-				/*
-					Todo:
-						There might be a problem here when the component is one of multiple elements,
-						it will probably be rendered last in the list instead of in it's current
-						location.
-				 */
-				parent.append(renderOutput);
+			if (oldComponent) {
+				parent = oldComponent.parentElement;
+				parent?.insertBefore(renderOutput, oldComponent)
+				oldComponent.remove();
+				oldComponent = null;
 			}
 			return renderOutput;
 		}
@@ -52,3 +44,28 @@ export default abstract class Component {
 	abstract render(): HTMLElement | Array<HTMLElement>;
 
 }
+
+/*
+Codepen html
+<ul>
+  <li id="1">one</li>
+  <li id="2">two</li>
+  <li id="3">three</li>
+  <li id="4">four</li>
+</ul>
+
+Codepen JS
+const newItem = document.createElement('li');
+newItem.innerText = 'fifty';
+const listItem = document.querySelector('[id="3"]');
+const parent = listItem.parentElement;
+parent.insertBefore(newItem, listItem);
+
+Codepen result
+    one
+    two
+    fifty
+    three
+    four
+
+ */

@@ -7,7 +7,7 @@ type Attribute = [keyof GlobalAttributes, any];
 type EventAttribute = [keyof EventHandlerAttributes | string, Function];
 
 function isStringOrHTMLElementOrComponent(arg: ElementDefinition): boolean {
-	return arg instanceof HTMLElement || typeof arg === 'string' || 'isComponent' in arg;
+	return arg !== undefined && (arg instanceof HTMLElement || typeof arg === 'string' || 'isComponent' in arg);
 }
 
 function assignAttributes(htmlElement: any, attr: Array<Attribute>) {
@@ -59,4 +59,4 @@ export function createElement(type: string, ...args: Array<ElementDefinition>) {
 	}
 
 	return element;
-};
+}

@@ -1,4 +1,4 @@
-import { mergeObjects } from './MergeObjects';
+import mergeObjects from './MergeObjects';
 
 describe('mergeObject', () => {
     it('should return an updated object', () => {

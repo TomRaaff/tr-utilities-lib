@@ -14,7 +14,7 @@
  * @param updatesObj: any
  * @returns {*}
  */
-export function mergeObjects(baseObj: any, updatesObj: any): any {
+export default function mergeObjects(baseObj: any, updatesObj: any): any {
     const base = { ...baseObj };
     base.__proto__ = baseObj.__proto__;
 
