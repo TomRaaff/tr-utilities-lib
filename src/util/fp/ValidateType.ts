@@ -68,10 +68,17 @@ export function isDate<T>(obj: T, field: keyof T): CorrectType | Array<WrongType
     }
 }
 
-// todo implement this.
-// export function isOfValue<T>(obj: T, field: keyof T): CorrectType | Array<WrongType> {
-//
-// }
+export function isOfValue<T>(options: Array<T>): ValidatorFn<any> {
+    return (obj: any, field: keyof any) => {
+        if (!obj && !Boolean(obj[field])) {
+            return createWrongType(obj, field, `options: ${options}`);
+        }
+        const matchesOption = options.filter(option => option === obj[field]).length > 0;
+        return matchesOption
+            ? new CorrectType()
+            : createWrongType(obj, field, `options: ${options}`);
+    }
+}
 
 export function optional<T>(validator: ValidatorFn<T>): ValidatorFn<T> {
     return (obj: T, field: keyof T) => (obj[field] == undefined) ? new CorrectType() : validator(obj, field);

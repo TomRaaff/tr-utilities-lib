@@ -1,4 +1,14 @@
-import {isArray, isBoolean, isDate, isNumber, isObject, isString, optional, validateType} from "./ValidateType";
+import {
+    isArray,
+    isBoolean,
+    isDate,
+    isNumber,
+    isObject,
+    isOfValue,
+    isString,
+    optional,
+    validateType
+} from "./ValidateType";
 
 type Person = {
     name: string;
@@ -13,6 +23,9 @@ type Address = {
     street: string;
     city: string
 }
+
+type Synth = 'oscillator' | 'filter' | 'amplifier';
+type Fibbonacci = 0 | 1 | 2 | 3 | 5 | 8;
 
 describe('ValidateType', () => {
     it('should succeed for primitives', () => {
@@ -221,5 +234,25 @@ describe('ValidateType', () => {
             }),
         });
         expect(result).toEqual(expected);
+    });
+
+    it('should work with string enums', () => {
+        const obj = {
+            type: 'oscillator' as Synth
+        }
+        const result = validateType<{type: Synth}>(obj, {
+            type: isOfValue<Synth>(['oscillator', 'filter', 'amplifier'])
+        });
+        expect(result).toEqual(obj);
+    });
+
+    it('should work with number enums', () => {
+        const obj = {
+            type: 5 as Fibbonacci
+        }
+        const result = validateType<{type: Fibbonacci}>(obj, {
+            type: isOfValue<Fibbonacci>([0, 1, 2, 3, 5, 8])
+        });
+        expect(result).toEqual(obj);
     });
 });
