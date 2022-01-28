@@ -16,16 +16,14 @@ export default abstract class Component {
 	renderHandler: ProxyHandler<any> = {
 		apply: (target, thisArg, argArray) => {
 			let oldComponent = document.querySelector(`[data-component-id="${this.componentId}"]`);
-			let parent;
-			const renderOutput = target.apply(thisArg, ...argArray) as HTMLElement;
-			renderOutput.dataset.componentId = this.componentId;
+			const newComponent = target.apply(thisArg, ...argArray) as HTMLElement;
+			newComponent.dataset.componentId = this.componentId;
 			if (oldComponent) {
-				parent = oldComponent.parentElement;
-				parent?.insertBefore(renderOutput, oldComponent)
+				oldComponent.parentElement?.insertBefore(newComponent, oldComponent);
 				oldComponent.remove();
 				oldComponent = null;
 			}
-			return renderOutput;
+			return newComponent;
 		}
 	};
 
