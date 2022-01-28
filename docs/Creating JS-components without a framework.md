@@ -15,6 +15,7 @@ tags:
 - Components
 - DOM
 - Framework-less
+- Rendering
 date: ???
 image: grey-lego.jpg
 social:title: Creating JS-components without a framework
@@ -22,7 +23,7 @@ social:description:
   Whenever we need to build something with component, we usually just use a
   framework. What if we didn't? How do you build re-usable, re-rendering,
   stateful components yourself?
-social:image: grey-lego.jpg
+social:image: ???
 ---
 
 // todo update metadata
@@ -46,17 +47,17 @@ gave me the inspiration for the syntax we could use.
 We want to be able to write our HTML elements in the following manner:
 
 ```Javascript
-const component = article({ class: 'card' },
-                          header({ class: 'card-header' },
-                                 h1('Card component')
-                          ),
-                          div({ class: 'card-content' },
-                              p('Here is the content of the card.'),
-                              button({ class: 'close-button', onclick: () => console.log('button clicked')},
-                                     'close'
-                              )
-                          )
-                   );
+const card = article({ class: 'card' },
+                    header({ class: 'card-header' },
+                           h1('Card component')
+                    ),
+                    div({ class: 'card-content' },
+                        p('Here is the content of the card.'),
+                        button({ class: 'close-button', onclick: () => console.log('button clicked')},
+                               'close'
+                        )
+                    )
+             );
 ```
 
 
@@ -333,15 +334,59 @@ class Component {
     // omitted all state-related code //
 }
 ```
-Admitted: this is not the prettiest solution, but I've never had any problems
-while using this.
+Admitted: just incrementing a number as an ID is not the prettiest solution, 
+but I've never had any problems while using this. Feel free to improve my code.
 
+Either way: we finally have a fully working way to create a stateful component! 
+Awesome! This is an example of how we can use it:
+```Javascript
+class ButtonComponent extends Component {
+  constructor(isClicked = false) {
+    super();
+    this.setState({isClicked});
+  } 
+  
+  render() {
+    const color = (this.state.isClicked) ? 'blue' : 'yellow';
+    const text = (this.state.isClicked) ? 'you clicked me' : 'click me';
+    return button({ class: color, onclick: () => {this.state.isClicked = !this.state.isClicked}},
+                  text
+           );
+  }
+}
 
-# TODO
-- add the component ID's
-- fix the array index problem. Or not. 
+const btnComponent = new ButtonComponent();
+document.querySelector('main').append(btnComponent.render());
+```
 
+Here's a quick recap of how this works under the hood:
+- We create a new component called ButtonComponent
+- In the super() constructor, we assign it an id and wrap our render function
+  in a proxy.
+- in the ButtonComponent constructor, we set the component state. Our super-class
+  will wrap the state in a proxy, listening for changes. 
+- We overwrite the render function and in it, we define what our html-output
+  should look like. In our case, simply a `<button>` with a click handler.
+- We render the button inside a `<main>` element
 
+Whenever the user clicks the button, this is what happens:
+- The click handler is fired, which updates the state.
+- The state proxy updates the state and calls the render function
+- Before the render function is executed, the render proxy intercepts the call.
+- The render proxy finds the old component and deletes it if it exists
+- it also renders the component with its new state and its ID
+- it renders it in the same place as the old component if it existed
+- or it passes the rendered result back if the component did not exist yet.
+  (In this case, the component cannot know where to render the component)
+
+[Here's a link](https://github.com/TomRaaff/tr-utilities-lib/blob/main/freeze/js-components) 
+to all I've talked about. Note: the examples in this article were written in 
+javascript to reduce complexity and provide focus. My actual code is written in 
+typescript.
+
+Disclaimer: if you want to use my code: copy and paste it and maintain it yourself.
+I will update my own version of this code quite often. It will also include 
+breaking changes quite often.
 
 
 
