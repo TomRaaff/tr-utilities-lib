@@ -2,3 +2,4 @@
 !.idea/codeStyles
 .parcel-cache
 dist/**
+node_modules
