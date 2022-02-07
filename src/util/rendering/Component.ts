@@ -15,14 +15,11 @@ export default abstract class Component {
 
 	renderHandler: ProxyHandler<any> = {
 		apply: (target, thisArg, argArray) => {
-			let oldComponent = document.querySelector(`[data-component-id="${this.componentId}"]`);
 			const newComponent = target.apply(thisArg, ...argArray) as HTMLElement;
 			newComponent.dataset.componentId = this.componentId;
-			if (oldComponent) {
-				oldComponent.parentElement?.insertBefore(newComponent, oldComponent);
-				oldComponent.remove();
-				oldComponent = null;
-			}
+
+			const oldComponent = document.querySelector(`[data-component-id="${this.componentId}"]`);
+			oldComponent?.replaceWith(newComponent);
 			return newComponent;
 		}
 	};

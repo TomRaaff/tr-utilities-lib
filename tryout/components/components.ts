@@ -1,5 +1,6 @@
-import {h1, div} from "../src";
-import Component from "../src/util/rendering/Component";
+import {h1, div} from "../../src";
+import Component from "../../src/util/rendering/Component";
+import {Counter} from "./Counter.component";
 
 class Clock extends Component {
     constructor() {
@@ -19,3 +20,9 @@ class Clock extends Component {
 }
 
 document.querySelector('main')!.append(new Clock().render());
+
+// Use this to test for rendering in place
+[1, 2, 3, 4].map((num) => new Counter(num).render())
+    .forEach((counter) => {
+        document.querySelector('[data-binding="argument-list"]')!.append(counter)
+    });
