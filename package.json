@@ -1,6 +1,6 @@
 {
   "name": "tr-utilities-lib",
-  "version": "1.7.11",
+  "version": "2.0.0",
   "description": "personal utilities library made by Tom Raaff",
   "source": "src/index.ts",
   "main": "dist/index.js",
