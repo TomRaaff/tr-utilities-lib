@@ -14,7 +14,8 @@
     "test": "jest",
     "build": "parcel build",
     "clean": "rm -rf dist/",
-    "prepublishOnly": "npm run clean && npm run build && npm version patch --force"
+    "prepare": "npm run clean && npm run build",
+    "prepublishOnly": "npm version patch --force"
   },
   "keywords": [
     "utilities",
