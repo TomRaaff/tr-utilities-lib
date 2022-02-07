@@ -30,7 +30,7 @@ export type Validator<T> = { [key in keyof T]: ValidatorFn<any> };
  *      });
  * ```
  */
-export function validateType<T>(obj: T, validator: Validator<T>): T | Array<WrongType> {
+export default function validateType<T>(obj: T, validator: Validator<T>): T | Array<WrongType> {
     const validationResults = Object.entries(validator)
         .map(([key, value]) => ({
             field: key as unknown as keyof T,

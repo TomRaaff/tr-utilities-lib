@@ -1,6 +1,15 @@
 export { default as Collection } from './util/fp/Collection';
 export { default as Maybe } from './util/fp/Maybe';
 export { default as mergeObjects } from './util/fp/MergeObjects';
+export { default as validateType } from './util/fp/ValidateType';
+export { isString } from './util/fp/ValidateType';
+export { isBoolean } from './util/fp/ValidateType';
+export { isNumber } from './util/fp/ValidateType';
+export { isDate } from './util/fp/ValidateType';
+export { optional } from './util/fp/ValidateType';
+export { isOfValue } from './util/fp/ValidateType';
+export { isArray } from './util/fp/ValidateType';
+export { isObject } from './util/fp/ValidateType';
 export { default as Either } from './util/fp/Either';
 export { default as Component } from './util/rendering/Component';
 export { default as dispatch } from './util/rendering/dispatch';

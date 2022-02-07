@@ -1,4 +1,4 @@
-import {
+import validateType, {
     isArray,
     isBoolean,
     isDate,
@@ -6,8 +6,7 @@ import {
     isObject,
     isOfValue,
     isString,
-    optional,
-    validateType
+    optional
 } from "./ValidateType";
 
 type Person = {

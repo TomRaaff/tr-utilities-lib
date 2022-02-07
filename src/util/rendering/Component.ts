@@ -42,28 +42,3 @@ export default abstract class Component {
 	abstract render(): HTMLElement | Array<HTMLElement>;
 
 }
-
-/*
-Codepen html
-<ul>
-  <li id="1">one</li>
-  <li id="2">two</li>
-  <li id="3">three</li>
-  <li id="4">four</li>
-</ul>
-
-Codepen JS
-const newItem = document.createElement('li');
-newItem.innerText = 'fifty';
-const listItem = document.querySelector('[id="3"]');
-const parent = listItem.parentElement;
-parent.insertBefore(newItem, listItem);
-
-Codepen result
-    one
-    two
-    fifty
-    three
-    four
-
- */

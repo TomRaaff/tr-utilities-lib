@@ -6,6 +6,10 @@ import Component from './Component';
 type Attribute = [keyof GlobalAttributes, any];
 type EventAttribute = [keyof EventHandlerAttributes | string, Function];
 
+/*
+	Todo:
+	- Can't handle primitive numbers (probably can't handle booleans either)
+ */
 function isStringOrHTMLElementOrComponent(arg: ElementDefinition): boolean {
 	return arg !== undefined && (arg instanceof HTMLElement || typeof arg === 'string' || 'isComponent' in arg);
 }
