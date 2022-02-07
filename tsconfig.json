@@ -5,6 +5,10 @@
     "moduleResolution": "Node",
     "target": "ES5",
     "outDir": "./dist",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "sourceMap": true,
     "removeComments": true,
     "esModuleInterop": true,

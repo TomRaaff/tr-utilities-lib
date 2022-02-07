@@ -1,0 +1,32 @@
+:root {
+    --light-green: #D4E09B;
+    --light-yellow: #F6F4D2;
+    --tea-green: #CBDFBD;
+    --salmon: #F19C79;
+    --red: #a44a3f;
+    --neutral1: #fafafa;
+    --neutral2: #efefef;
+    --neutral5: #7A7A7A;
+    --neutral9: #0F0F0F;
+}
+
+body {
+    margin: 0;
+    font-family: 'Rubik', sans-serif;
+    background: var(--neutral2);
+    color: var(--neutral9);
+}
+
+header {
+    background: var(--red);
+    color: var(--light-yellow);
+    overflow: auto;
+}
+
+main {
+    background: var(--neutral1);
+    width: 90vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
