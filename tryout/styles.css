@@ -30,3 +30,21 @@ main {
     margin: 0 auto;
     padding: 1rem;
 }
+
+
+form.html-validation {
+    width: 400px;
+    margin: 0 auto;
+}
+.key-value {
+    padding: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+}
+input {
+    padding: 0.5rem;
+    border-radius: 5px;
+}
+input:invalid {
+    border: red 2px solid;
+}
