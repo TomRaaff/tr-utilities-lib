@@ -23,7 +23,11 @@ function setVisible(selector: string, isVisible: boolean) {
 }
 
 function addEvent(selector: string, event: string, handler: (event: Event) => void) {
-    document.querySelector(selector)?.addEventListener(event, handler);
+    const element = document.querySelector(selector);
+    element?.addEventListener(event, handler);
+    return function remove() {
+        element?.removeEventListener(event, handler);
+    }
 }
 
 const form = document.querySelector('form');
