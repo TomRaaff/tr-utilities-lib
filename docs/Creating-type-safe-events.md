@@ -5,7 +5,7 @@ description:
 author: Tom Raaff
 categories:
   - Typescript
-  - Front End
+  - Frontend
 tags:
   - Typescript
   - Events
@@ -67,8 +67,8 @@ function subscribe<T extends BookstoreEvents>(eventName: T, handlerFn: (payload:
 }
 ```
 
-So let's break down what is going on here. First we create an eventBus. (You can read why this works
-[here](https://css-tricks.com/lets-create-a-lightweight-native-event-bus-in-javascript/)).
+So, let's break down what is going on here. First, we create an eventBus. (You can read why this works in this excellent
+[article](https://css-tricks.com/lets-create-a-lightweight-native-event-bus-in-javascript/) I mentioned earlier).
 
 Here we define our events.
 ```typescript
@@ -82,7 +82,7 @@ The EventsDefinition object connects the name of our event to the type of the pa
 event to have a payload of type Customer.
 
 The BookstoreEvents type simply takes the keys of the EventDefinition. So, in this case, the type of BookstoreEvents is
-equal to `'CUSTOMER_CREATED' | 'ORDER_CREATED'`. But with an extra benefit: if we want to add new events, we'd only have
+equal to `'CUSTOMER_CREATED' | 'ORDER_CREATED'`. But with an extra benefit: if we want to add new events, we only have
 to expand our EventsDefinition type.
 
 ### Publish function
@@ -98,7 +98,7 @@ interesting part.
 
 When first writing this, I thought it made sense to write the function signature like this:
 `function publish(eventName: BookstoreEvents, payload?: ...)` But as you can see, this signature lacks a connection
-between the event name and it's desired type. The solution is to introduce a generic.
+between the event name and its desired type. The solution is to introduce a generic.
 
 Unfortunately you can't say `function publish<BookstoreEvents>(eventName: BookstoreEvents, payload?: EventsDefinition[BookstoreEvents])`...
 You'll get this error: `Type 'BookstoreEvents' cannot be used to index type 'EventsDefinition'`. But luckily,
@@ -139,12 +139,11 @@ subscribe('ORDER_CREATED', (order: Order) => {
 publish('CUSTOMER_CREATED', { id: '23498783', name: 'Dalinar Kholin' });
 publish('ORDER_CREATED', { book: 'The way of kings', price: 23.99 });
 ```
-And this is actually type safe. It is now impossible to combine 'ORDER_CREATED' with a Customer payload. You should try
-this out and [play around with the code.](https://www.typescriptlang.org/play?#code/MYewdgzgLgBApgNzmKAhArhGBeGY4DuMAwiALZnJQAUA5IlQLQBGmtAlANwBQ3UAngAc4JTFHJwATjhgBvbjEUwAlgBMAXDGiTlYAOY8leAIaVN23Qe4BfHgOEwA8pNVSZ8o8xAgA1uag6+oZKgjrAcJpg6GTMUjy2fEIiAKJIKBAAInAAZrrKUMrg7gpKxACqAMoAKo4AsskASgD6xA3JAIJVyRmaxGISksGKjg0ZjS1tnd2azq6D3ACQI2PNFQASAJIAClvTMAggavF2STCo3j7QIJJwqVRYuD5w-CDZMHfpWblg+YVgPNxsugwMACkVBOhmAAbZQQAAWAB4qvAAB5QZCqLDnXxXG4fKAQAB81AYKAAcqYIjAqgAaGCCYz8KEgYyqAD8mnxmRyeTBYAA2lUALrsTQHNRyEqKUCQWCk2C4agMpks1TsGBsvCEURXMj4klpKAUyh02QwVxQYzKKGaZXM1kwazqyLavq6-Xy41wLhS+CGjAQAB0qlhDKgwDhHsNPusvHsIjKkEhEGAOliMmo6uwhP2h1UAKBIL5WmTqeUsSRqPRYExZwuuNuhqJBqoXs0tJgcOMNahUgAYmBNErGfaNO8m19eX9BSKcDnxWrNImIKW0yJ5AsZdA-VQ1t3VL3pIr5Zzo3PJUYjFu5YatiPVRn5TBjFg3eI9dHg3BLdbn1guZOPx8jOQyXl2Pb9mALYoHeKqsj6RixkY8oBoGrKqPiAAysLVlI0FGpSdLynuEGSD6Cw3FA6CSGAMCZueG4LChmCBjcZAgEgWE4cgeGeoRO4oCRB5SORsaxtwAD0EmoqYgi9jAmDGHoIgEPkcIwPGWjGNk378NwK7MCma50OU1R1OMrQdF0GS0HS1DAP0lCSL0jkiQxvpbiAvaBsyeh0A5upuKmcDGOiqi2TAAXviJ8TsLwBlGeWcB0MsFmTNZEXUNccwzC4bnZheSied5vl0NlQU3KFcDhXS5VkbFAIJWWsQpaM4zrNsuw2XZWY5sVcA+SAfm0HVWhwsogjCOF7A+twELQrCcImZUNT1M0llTN1cgqGOtAAEwAMwACwAJwABwAOxnQdEVgJSmi0Bkxgwnd0gANJwl5ui0I6PrzTC8KtSsExWd0EVml4vgPVUcIqYyMCvDAPiWBAEWhMo4SaIdgYnSdv08P9i1A+1mw7GDXBAA)
+And this is actually type safe. It is now impossible to combine 'ORDER_CREATED' with a Customer payload.
 
 ### Without a payload
-But what if you want to send out an event _without_ a payload? In that case, you'd still need to register the event in
-the EventsDefinition type. The trick is to have the event have a type of `void`. Like this:
+But what if you want to send out an event _without_ a payload? In that case, you still need to register the event in
+the EventsDefinition type. The trick is to give the event a type of `void`. Like this:
 ```typescript
 type EventsDefinition = {
     CUSTOMER_CREATED: Customer;
@@ -156,7 +155,8 @@ subscribe('ORDER_SHIPPED', () => console.log('order shipped'));
 
 publish('ORDER_SHIPPED');
 ```
-This actually works and will throw compiler errors whenever you would try to add a payload to either your subscribe
+This actually works and will throw compiler errors whenever you try to add a payload to either your subscribe
 handler function or your publish.
+You should try [playing around with this code example!](https://www.typescriptlang.org/play?#code/MYewdgzgLgBApgNzmKAhArhGBeGY4DuMAwiALZnJQAUA5IlQLQBGmtAlANwBQ3UAngAc4JTFHJwATjhgBvbjEUwAlgBMAXDGiTlYAOY8leAIaVN23Qe4BfHgOEwA8pNVSZ8o8xAgA1uag6+oZKgjrAcJpg6GTMUjy2fEIiAKJIKBAAInAAZrrKUMrg7gpKxACqAMoAKo4AsskASgD6xA3JAIJVyRmaxGISksGKjg0ZjS1tnd2azq6D3ACQI2PNFQASAJIAClvTMAggavF2STCo3j7QIJJwqVRYuD5w-CDZMHfpWblg+YVgPNxsugwMACkVBOhmAAbZQQAAWAB4qvAAB5QZCqLDnXxXG4fKAQAB81AYKAAcqYIjAqgAaGCCYz8KEgYyqAD8mnxmRyeTBYAA2lUALrsTQHNRyEqKUCQWCk2C4agMpks1TsGBsvCEURXMj4klpKAUyh02QwVxQYzKKGaZXM1kwazqyLavq6-Xy41wLhS+CGjAQAB0qlhDKgwDhHsNPusvHsIjKkEhEGAOliMmo6uwhP2h1UAKBIL5WmTqeUsSRqPRYExZwuuNuhqJBqoXs0tJgcOMNahUgAYmBNErGfaNO8m19eX9BSKcDnxWrNImIKW0yJ5AsZdA-VQ1t3VL3pIr5Zzo3PJUYjFu5YatiPVRn5TBjFg3eI9dHg3BLdbn1guZOPx8jOQyXl2Pb9mALYoHeKqsj6RixkY8oBoGrKqPiAAysLVlI0FGpSdLynuEGSD6Cw3FA6CSGAMCZueG4LChmCBjcZAgEgWE4cgeGeoRO4oCRB5SORsaxtwAD0EmoqYgi9jAmDGHoIgEPkcIwPGWjGNk378NwK7MCma50OU1R1OMrQdF0GS0HS1DAP0lCSL0jkiQxvpbiAvaBsyeh0A5upuKmcDGOiqi2TAAXviJ8TsLwBlGeWcB0MsFmTNZEXUNccwzC4bnZheSied5vl0NlQU3KFcDhXS5VkbFAIJWWsQpaM4zrNsuw2XZWY5sVcA+SAfm0HVWhwsogjCOF7A+twELQrCcImZUNT1M0llTN1cgqGOtAAEwAMwACwAJwABwAOxnQdEVgJSmi0Bkxgwnd0gANJwl5ui0I6PrzTC8KtSsExWd0EVml4vgPVUcIqYyMCvDAPiWBAEWhMo4SaIdgYnSdv08P9i1A+1mw7GDXBAA)
 
 Happy coding!
