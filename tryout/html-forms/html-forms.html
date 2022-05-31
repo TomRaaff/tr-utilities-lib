@@ -15,22 +15,23 @@
 <body>
 <main>
     <h2>Welcome to our website</h2>
-    <p>Who are you?</p>
+    <p>Tell me about you</p>
     <article>
+        <form id="partner-form"></form>
         <form id="html-form" class="html-validation">
             <div class="key-value">
                 <label for="name">Name:</label>
-                <input id="name" name="name" type="text" required minlength="2" maxlength="100">
+                <input id="name" name="name" type="text" required minlength="2" maxlength="100" placeholder="enter your name">
             </div>
 
             <div class="key-value">
                 <label for="age">Age:</label>
-                <input type="number" name="age" id="age" required min="5" max="120">
+                <input type="number" name="age" id="age" required min="5" max="120" placeholder="enter your age">
             </div>
 
             <div class="key-value">
                 <label for="email">e-mailaddress:</label>
-                <input type="email" name="email" id="email">
+                <input type="email" name="email" id="email" placeholder="john.doe@mail.com">
             </div>
 
             <div class="key-value">
@@ -53,9 +54,31 @@
                 <input type="checkbox" id="extraQuestion" name="extraQuestion" class="toggle">
             </div>
 
-            <div class="key-value petName">
+            <div class="key-value petName invisible">
                 <label for="petName">What is your pet's name?</label>
                 <input type="text" id="petName" name="petName">
+            </div>
+
+            <div class="key-value">
+                <label for="status">Status</label>
+                <select name="status" id="status">
+                    <option value="">-</option>
+                    <option value="single">Single</option>
+                    <option value="in a relationship">In een relatie</option>
+                    <option value="living together">Samenwonend</option>
+                    <option value="married">Getrouwd</option>
+                </select>
+            </div>
+
+            <div class="partner-form invisible">
+                <div class="key-value">
+                    <label for="partnerName">Naam partner</label>
+                    <input type="text" id="partnerName" name="partnerName" required minlength="2" placeholder="enter your partner's name">
+                </div>
+                <div class="key-value">
+                    <label for="partnerAge">Leeftijd partner</label>
+                    <input type="number" id="partnerAge" name="partnerAge" required min="0" max="120" placeholder="enter your partner's age">
+                </div>
             </div>
 
 
@@ -64,6 +87,6 @@
         </form>
     </article>
 </main>
-<script type="module" src="./html-validation.ts" defer></script>
+<script type="module" src="html-forms.ts" defer></script>
 </body>
 </html>

@@ -11,6 +11,10 @@ input {
     padding: 0.5rem;
     border-radius: 5px;
 }
-input:invalid {
+input:not(:focus):not(:placeholder-shown):invalid {
     border: red 2px solid;
+}
+
+.invisible {
+    display: none;
 }
