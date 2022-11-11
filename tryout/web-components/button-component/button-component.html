@@ -8,11 +8,15 @@
 <main>
     <h3>There should be a button here</h3>
     <div>
-    <button-component text="Click me!" isLoading="false"></button-component>
+        <button-component text="Click me!"></button-component>
+    </div>
+    <div>
+        <button-lit-component text="Lit button"></button-lit-component>
     </div>
 </main>
 
 <script src="../../../src/util/components/button.component.ts"></script>
+<script src="../../../src/util/components/lit/button.lit.component.js" type="module"></script>
 <script>
     const btnComponent = document.querySelector('button-component');
     btnComponent.addEventListener('onClick', () => {
@@ -20,6 +24,15 @@
         setTimeout(() => {
             btnComponent.isLoading = false;
         }, 2000);
+    });
+
+    const btnLitComponent = document.querySelector('button-lit-component');
+    btnLitComponent?.addEventListener('onClick', (evt) => {
+        console.log(evt.detail);
+        btnLitComponent.isLoading = true;
+        setTimeout(() => {
+            btnLitComponent.isLoading = false;
+        }, 2000)
     });
 </script>
 </body>
